@@ -8,8 +8,8 @@
             background-color: aliceblue;
         }
         table {
-            margin-top: 100px;
-            margin-left: 100px;
+            margin-top: 30px;
+            margin-left: 70px;
             font-size: 50pt;
             background-color: white;
         }
@@ -19,24 +19,47 @@
             margin-left: 0px;
             margin-right: 0px;
             height: 200px;
-            width: 500px;
-            font-size: 30pt;
+            width: 1500px;
+            font-size: 20pt;
             font-family: 'Courier New', Courier, monospace;
         }
-        tr {
-            height: 50px;
-            
+        .output {
+            height: 400px;
+            display: block;
+            overflow-y: scroll;
         }
         td {
-            /* padding-top: 20px;
-            padding-bottom: 20px;
-            padding-left: 20px;
-            padding-right: 20px; */
             padding: 50px;
         }
     </style>
 </head>
 <body>
+    <div hidden>\(
+        \def\RR{{\mathbb{R}}}
+        \def\NN{{\mathbb{N}}}
+        \def\ZZ{{\mathbb{Z}}}
+        \def\QQ{{\mathbb{Q}}}
+        \def\cases#1{{
+            \begin{cases} 
+            #1
+            \end{cases} 
+        }}
+        \def\union#1{{
+            \left[
+                \begin{array}{l}
+                    #1 
+                \end{array}
+            \right.
+        }}
+        \def\mequiv#1#2#3{{
+            #1 \equiv #2 ~~(\operatorname{mod~} #3)
+        }}
+        \def\matrix#1{
+            \begin{pmatrix}
+                #1  
+            \end{pmatrix}
+        }
+    \)</div>
     <div id="app"> </div>
        
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -59,10 +82,18 @@
             MathJax.typeset();
         },[tex]);
         var update = e => {
-            setTex('\\('+e.target.value
-            .replace(/\n/g,'\\)<br><br>\\(')
-            .replace(/\\frac/,'\\displaystyle\\frac')
-            +'\\)'
+            setTex('\\(\\begin{array}{l}'+e.target.value
+            .replace(/\\frac/g,'\\displaystyle\\frac')
+            .replace(/\\int/g,'\\displaystyle\\int')
+            .replace(/<=>/g,'\\Leftrightarrow')
+            .replace(/=>/g,'\\Rightarrow')
+            .replace(/<=/g,'\\Leftarrow')
+            .replace(/<->/g,'\\leftrightarrow')
+            .replace(/->/g,'\\rightarrow')
+            .replace(/<-/g,'\\leftarrow')
+            .replace(/\(/g , '\\left(')
+            .replace(/\)/g , '\\right)')
+            +'\\end{array}\\)'
             );
         }
         return (
@@ -70,9 +101,9 @@
                 <table>
                     <tbody>
                         <tr>
-                            <td dangerouslySetInnerHTML={{__html: tex}}></td>
+                            <td className='output'>{tex}</td>
                         </tr>
-                        <tr>
+                        <tr className='input'>
                             <td><textarea onChange={update} /></td>
                         </tr>
                     </tbody>
