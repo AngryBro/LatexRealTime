@@ -77,12 +77,27 @@
     }
 
     const App = () => {
+        var [rawTex, setRawTex] = React.useState('');
         var [tex, setTex] = React.useState('');
         React.useEffect(() => {
             MathJax.typeset();
+            if((document.querySelector('mjx-merror')===null)
+            &&(document.getElementById('raw_tex')
+            .innerHTML.indexOf('\\(')===-1)) {
+                setTex(rawTex);
+            }
+        },[rawTex]);
+        React.useEffect(() => {
+            MathJax.typeset();
+            var error = document.querySelectorAll('mjx-mtext');
+            if(error.length>0) {
+                error.forEach(element => {
+                    element.removeAttribute('style');
+                });
+            }
         },[tex]);
-        var update = e => {
-            setTex('\\(\\begin{array}{l}'+e.target.value
+        var parseTex = raw =>
+            '\\(\\begin{array}{l}'+raw
             .replace(/\\frac/g,'\\displaystyle\\frac')
             .replace(/\\int/g,'\\displaystyle\\int')
             .replace(/<=>/g,'\\Leftrightarrow')
@@ -93,11 +108,17 @@
             .replace(/<-/g,'\\leftarrow')
             .replace(/\(/g , '\\left(')
             .replace(/\)/g , '\\right)')
-            +'\\end{array}\\)'
-            );
+            .replace(/\[/g , '\\left[')
+            .replace(/\]/g , '\\right]')
+            .replace(/\\\{/g , '\\left\\{')
+            .replace(/\\\}/g , '\\right\\}')
+            +'\\end{array}\\)';
+        var update = e => {
+            setRawTex(parseTex(e.target.value));
         }
         return (
             <div>
+                <div hidden={true} id='raw_tex'>{rawTex}</div>
                 <table>
                     <tbody>
                         <tr>
