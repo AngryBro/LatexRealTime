@@ -112,6 +112,9 @@
             .replace(/\]/g , raw.indexOf('sqrt[')===-1?'\\right]':']')
             .replace(/\\\{/g , '\\left\\{')
             .replace(/\\\}/g , '\\right\\}')
+            .replace(/\\\*/g, '__star__')
+            .replace(/\*/g, ' \\cdot ')
+            .replace(/__star__/g, '*')
             +'\\end{array}\\)';
         var update = e => {
             setRawTex(parseTex(e.target.value));
