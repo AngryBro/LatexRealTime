@@ -109,7 +109,7 @@
             .replace(/\(/g , '\\left(')
             .replace(/\)/g , '\\right)')
             .replace(/\[/g , raw.indexOf('sqrt[')===-1?'\\left[':'[')
-            .replace(/\]/g , raw.indexOf('sqrt[')===-1?'\\right]':'[')
+            .replace(/\]/g , raw.indexOf('sqrt[')===-1?'\\right]':']')
             .replace(/\\\{/g , '\\left\\{')
             .replace(/\\\}/g , '\\right\\}')
             +'\\end{array}\\)';
